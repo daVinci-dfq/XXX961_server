@@ -4,9 +4,9 @@ server:
     uri-encoding: utf-8
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/web_data?autoReconnect=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 123456
+    url: jdbc:mysql://202.194.14.120/web_2023_14?autoReconnect=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: web_2023_14
+    password: Teachweb2023.14
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -14,5 +14,5 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+      dialect: org.hibernate.dialect.MySQL5Dialect
 

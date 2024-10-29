@@ -20,7 +20,7 @@ import org.springframework.web.socket.config.annotation.*;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    final StompInterceptor stompInterceptor;
+//    final StompInterceptor stompInterceptor;
 
     /**
      * 注册STOMP端点（Endpoint），用于使用WebSocket连接服务。
@@ -47,9 +47,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setUserDestinationPrefix("/user");     // 一对一消息使用前缀，默认/user。
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(stompInterceptor);
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(stompInterceptor);
+//    }
 
 }
