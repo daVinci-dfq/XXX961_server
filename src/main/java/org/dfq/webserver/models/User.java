@@ -1,7 +1,9 @@
 package org.dfq.webserver.models;
 
+/**
+ * 用户类
+ */
 
-import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
