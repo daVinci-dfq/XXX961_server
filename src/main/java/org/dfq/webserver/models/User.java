@@ -2,11 +2,14 @@ package org.dfq.webserver.models;
 
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
-@Table(name = "users")
 @Data
 public class User {
 
@@ -15,23 +18,18 @@ public class User {
     private Integer userId;
 
     @NotBlank
-    @JoinColumn(name = "user_name")
     private String username;
 
     @NotBlank
-    @JoinColumn(name = "password")
     private String password;
 
     @NotBlank
-    @JoinColumn(name = "phone")
     private String phone;
 
     @NotBlank
-    @JoinColumn(name = "email")
     private String email;
 
     @NotBlank
-    @JoinColumn(name = "role")
     private String role;
 
 
