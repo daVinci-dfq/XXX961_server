@@ -5,7 +5,10 @@ import org.dfq.webserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -53,4 +56,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Old password is incorrect.");
         }
     }
+
+
+    // 仅管理员可以访问
+    //获取全部用户列表
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getUserList")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+
 }

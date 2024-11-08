@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -18,6 +19,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
+
+    @ManyToOne()
+    private UserType userType;
 
     @NotBlank
     private String username;
@@ -31,8 +35,18 @@ public class User {
     @NotBlank
     private String email;
 
-    @NotBlank
-    private String role;
+    @Size(max = 20)
+    private String createTime; //注册时间
+
+
+
+    public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
 
     // 更改密码
