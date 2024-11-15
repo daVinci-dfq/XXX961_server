@@ -2,15 +2,20 @@ package org.dfq.webserver.service;
 
 import jakarta.persistence.Access;
 import org.dfq.webserver.models.User;
+import org.dfq.webserver.service.LoginService;
 import org.dfq.webserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private LoginService loginService;
 
     // 用户注册
     public User register(User user) {
