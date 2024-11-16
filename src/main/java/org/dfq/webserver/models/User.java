@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Data
 public class User {
@@ -33,6 +35,21 @@ public class User {
 
     @NotBlank
     private String role;
+
+
+
+
+    private Date createTime;
+    private Date lastLogin;
+
+    public User(Integer Id, String username) {
+        this.userId = Id;
+        this.username = username;
+    }
+    public User() {}
+
+
+
 
     public Integer getUserId() {
         return userId;

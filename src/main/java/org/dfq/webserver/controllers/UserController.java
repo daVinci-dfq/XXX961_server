@@ -1,83 +1,66 @@
 package org.dfq.webserver.controllers;
 
-import jakarta.validation.constraints.NotNull;
+import org.dfq.webserver.models.ControllerRes;
+import org.dfq.webserver.models.ServiceRes;
 import org.dfq.webserver.models.User;
-import org.dfq.webserver.service.UserService;
+import org.dfq.webserver.service.Impl.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-@RestController
-@RequestMapping("/api/users")
+@Slf4j
+@Controller
+@ResponseBody
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    UserService UserService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        User registeredUser = userService.register(user);
-        return ResponseEntity.ok(registeredUser);
+    public ControllerRes register(User user) {
+
+        // 注册
+        ServiceRes serviceRes = UserService.register(user);
+
+        return new ControllerRes(serviceRes.getCode(), serviceRes.getMsg());
     }
 
-    // 修改用户信息
-    @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer userId, @RequestBody User updatedUser) {
-        User user = userService.updateUser(userId, updatedUser);
-        return ResponseEntity.ok(user);
+    @PostMapping("/login")
+    public ControllerRes login(User user, HttpServletResponse response) {
+
+        // 登录
+        ServiceRes serviceRes = UserService.login(user);
+
+        // 登录成功后往响应头插入jwt
+        if(serviceRes.getJwt() != null) response.addHeader("access-token", serviceRes.getJwt());
+
+        return new ControllerRes(serviceRes.getCode(), serviceRes.getMsg());
     }
 
-    // 注销账号
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer userId) {
-        userService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/pwd")
+    public ControllerRes changePassWord(User user, HttpServletRequest request) {
+
+        // 取出jwt中的用户
+        User jwtUser = (User)request.getAttribute("jwt-user");
+
+        // 合并jwt中用户的用户名与传入用户的新密码
+        // 此处不能直接使用传入的用户名，防止恶意修改其他用户的密码
+        user.setUserId(jwtUser.getUserId());
+
+        // 改密
+        ServiceRes serviceRes = UserService.changePassWord(user);
+
+        return new ControllerRes(serviceRes.getCode(), serviceRes.getMsg());
+
     }
-
-    // 更改密码
-    @PutMapping("/{userId}/change-password")
-    public ResponseEntity<String> changePassword(@PathVariable Integer userId,
-                                                 @RequestParam String oldPassword,
-                                                 @RequestParam String newPassword) {
-        boolean success = userService.changePassword(userId, oldPassword, newPassword);
-        if (success) {
-            return ResponseEntity.ok("Password changed successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Old password is incorrect.");
-        }
-    }
-
-    private static String UPLOAD_DIR = "/path/to/upload-dir"; //服务器的存储目录  需要改
-
-
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return "文件为空，请选择一个文件再上传。";
-        }
-
-        try {
-            // 获取文件并保存到指定位置
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());
-            Files.write(path, bytes);
-
-            return "文件上传成功！文件名：" + file.getOriginalFilename();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "文件上传失败！";
-        }
-    }
-
-
-
 
 }
+
