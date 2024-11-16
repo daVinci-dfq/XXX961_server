@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.*;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
@@ -23,7 +24,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
     //以便可以在配置类中使用webSocketHandler
-    private  WebSocketHandler webSocketHandler;
+    private WebSocketHandler webSocketHandler;
 
     public void WebSocketStompConfig(WebSocketHandler webSocketHandler) {
         this.webSocketHandler= webSocketHandler;
