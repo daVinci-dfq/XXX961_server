@@ -20,8 +20,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @ManyToOne()
-    private UserType userType;
+//    @ManyToOne()
+//    private UserType userType;
 
     @NotBlank
     private String username;
