@@ -8,6 +8,8 @@ spring:
     username: web_2023_14
     password: Teachweb2023.14
     driver-class-name: com.mysql.cj.jdbc.Driver
+  session:
+    store-type: jdbc   # 使用 JDBC 存储会话
   jpa:
     database: mysql
     show-sql: true
