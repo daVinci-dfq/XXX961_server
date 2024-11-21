@@ -12,6 +12,8 @@ public class VideoUserRelationController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
     private UserServiceImpl userServiceImpl;
 
 }

@@ -20,11 +20,11 @@ public class VideoUserRelation {
     private Integer relationId;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "VideoId")
+    @JoinColumn(name = "videoId")
     private Video video;
 
 

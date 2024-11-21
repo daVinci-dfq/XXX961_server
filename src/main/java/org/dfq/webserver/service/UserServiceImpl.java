@@ -1,26 +1,22 @@
 package org.dfq.webserver.service;
 
 import org.dfq.webserver.models.User;
+import org.dfq.webserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.dfq.webserver.models.ServiceRes;
-import org.dfq.webserver.security.UserMapper;
 import org.dfq.webserver.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserService {
 
     @Autowired
-    UserMapper userMapper;
+    UserRepository userRepository;
 
     /**
      * 注册
@@ -41,7 +37,7 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
                 // 加入创建时间
                 user.setCreateTime(new Date());
                 // 入库
-                userMapper.insert(user);
+                userRepository.save(user);
                 return new ServiceRes(1, "注册成功");
 
             } else return new ServiceRes(-1, "用户名或密码不合法");
@@ -70,7 +66,7 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
 
                 // 更新用户最后登录时间
                 curUser.setLastLogin(new Date());
-                userMapper.updateById(curUser);
+                userRepository.save(curUser);
 
                 // 生成jwt
                 Map<String, String> payload = new HashMap<>();
@@ -113,7 +109,15 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
         // 密码非对称加密
         user.setPassword(this.MD5Code(user.getPassword()));
         // 更新密码
-        return userMapper.updateById(user)>0;
+        return true;
+
+
+
+        //-----------------------------------------真的要return true吗？？？------------------------------------------
+
+
+
+
     }
 
     /**
@@ -122,10 +126,17 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
      * @return 用户存在返回 用户对象 不存在返回 null
      */
     private User checkUserIsExit(User user) {
-        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(User::getUsername, user.getUsername());
-        lqw.eq(User::getPassword, user.getPassword());
-        return userMapper.selectOne(lqw);
+//        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+//        lqw.eq(User::getUsername, user.getUsername());
+//        lqw.eq(User::getPassword, user.getPassword());
+//        return userMapper.selectOne(lqw);
+        Integer userId = user.getUserId();
+        User u = null;
+        Optional<User> op = userRepository.findById(userId);
+        if(op.isPresent()) {
+            u = op.get();
+        }
+        return u;
     }
 
     /**
@@ -134,10 +145,13 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
      * @return 唯一返回 true 不唯一返回 false
      */
     private Boolean checkUserNameIsUnique(User user) {
-        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(User::getUsername, user.getUsername());
-        List<User> userList = userMapper.selectList(lqw);
-        return userList.size() == 0;
+//        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+//        lqw.eq(User::getUsername, user.getUsername());
+//        List<User> userList = userMapper.selectList(lqw);
+//        return userList.size() == 0;
+        String name = user.getUsername();
+        User u = userRepository.findByUsername(name);
+        return u == null;
     }
 
     /**

@@ -8,7 +8,6 @@ import org.springframework.messaging.support.ChannelInterceptor;
 @RequiredArgsConstructor
 public class StompInterceptor implements ChannelInterceptor {
 
-    final JwtService jwtService;
 
 //    @Override
 //    public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel messageChannel) {
