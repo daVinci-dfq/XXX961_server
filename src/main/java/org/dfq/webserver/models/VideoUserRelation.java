@@ -8,9 +8,9 @@ import org.dfq.webserver.models.Video;
 import org.springframework.data.relational.core.sql.In;
 
 /**
- *视频与用户关系类（点赞）
+ *视频与用户关系类(点赞,发布)
  *relationId(主键)
- *
+ *userID和videoId
  */
 @Data
 @Entity

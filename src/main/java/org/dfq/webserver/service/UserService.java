@@ -3,6 +3,10 @@ package org.dfq.webserver.service;
 import org.dfq.webserver.models.User;
 import org.dfq.webserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.dfq.webserver.models.ServiceRes;
 import org.dfq.webserver.security.JwtUtil;
@@ -13,7 +17,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserService {
+public class UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -23,8 +27,7 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
      * @param user 用户类
      * @return ServiceRes
      */
-    @Override
-    public ServiceRes register(User user) {
+    public ResponseEntity<String> register(User user) {
 
         // 判断用户名是否唯一
         if(this.checkUserNameIsUnique(user)) {
@@ -38,11 +41,11 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
                 user.setCreateTime(new Date());
                 // 入库
                 userRepository.save(user);
-                return new ServiceRes(1, "注册成功");
+                return new ResponseEntity<>("注册成功！", HttpStatus.OK);
 
-            } else return new ServiceRes(-1, "用户名或密码不合法");
+            } else return ResponseEntity.status(600).body("密码不合法。");
 
-        } else return new ServiceRes(-1, "用户名已存在");
+        } else return ResponseEntity.status(601).body("用户名已存在。");
 
     }
 
@@ -51,8 +54,7 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
      * @param user 用户类
      * @return ServiceRes
      */
-    @Override
-    public ServiceRes login(User user) {
+    public ResponseEntity<String> login(User user) {
 
         // 判断用户名密码是否合法
         if(this.checkUserNameAndPassword(user)) {
@@ -73,22 +75,21 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
                 payload.put("userId", curUser.getUserId().toString()); // 加入一些非敏感的用户信息
                 payload.put("userName", curUser.getUsername());    // 加入一些非敏感的用户信息
                 String jwt = JwtUtil.generateToken(payload);
-                return new ServiceRes(1, "登录成功", jwt);
+                return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(jwt);
 
-            } else return new ServiceRes(-1, "用户名或密码错误");
+            } else return ResponseEntity.status(602).body("用户名或密码错误。");
 
-        } else return new ServiceRes(-1, "用户名或密码不合法");
-
+        } else return ResponseEntity.status(603).body("用户名或密码不合法。");
     }
 
     /**
      * 改密业务
      * @return ServiceRes
      */
-    @Override
-    public ServiceRes changePassWord(User user) {
-        if(this.updatePassWord(user)) return new ServiceRes(1, "改密成功");
-        else return new ServiceRes(-1, "改密失败");
+//    @Override
+    public ResponseEntity<String> changePassWord(User user) {
+        if(this.updatePassWord(user)) return ResponseEntity.ok().body("改密成功。");
+        else return ResponseEntity.status(604).body("改密失败。");
     }
 
     /**
@@ -110,14 +111,7 @@ public class UserServiceImpl implements org.dfq.webserver.service.Impl.UserServi
         user.setPassword(this.MD5Code(user.getPassword()));
         // 更新密码
         return true;
-
-
-
         //-----------------------------------------真的要return true吗？？？------------------------------------------
-
-
-
-
     }
 
     /**
