@@ -15,7 +15,9 @@ public class Video {
     private String videoName;  // 视频名称
     @ManyToOne
     private User publisher;   // 发布者
+
     private String videoUrl;    // 视频 URL
+
     private String thumbnailUrl; // 视频封面 URL
 
 
