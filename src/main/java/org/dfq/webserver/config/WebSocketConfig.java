@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.socket.config.annotation.*;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
@@ -22,12 +23,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
 
-    //以便可以在配置类中使用webSocketHandler
-    private  WebSocketHandler webSocketHandler;
+    // 以便可以在配置类中使用webSocketHandler
+//    private  WebSocketHandler webSocketHandler;
 
-    public void WebSocketStompConfig(WebSocketHandler webSocketHandler) {
-        this.webSocketHandler= webSocketHandler;
-    }
+//    public void WebSocketStompConfig(WebSocketHandler webSocketHandler) {
+//        this.webSocketHandler= webSocketHandler;
+//    }
 
 //    final StompInterceptor stompInterceptor;
 
@@ -48,6 +49,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                .addInterceptors(new WebSocketHandshakeInterceptor())      // 拦截处理，自定义拦截器。
                 .withSockJS();      // 支持sockJS访问。
     }
+
+
+////将 CORS 配置放在 addCorsMappings 方法中
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOriginPatterns("http://*.example.com", "http://*.anotherdomain.com")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE")
+//                .allowCredentials(true);  // 允许带凭证的请求
+//    }
 
     /**
      * 注册信息代理，设置信息请求的各种规范。
