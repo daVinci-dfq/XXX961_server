@@ -45,9 +45,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/webSocket")      // 将"/webSocket"注册为STOMP端点，连接这个端点即可进行WebSocket通讯。
                 .addInterceptors(new HttpSessionHandshakeInterceptor())  // 记录握手中的Session信息
                 //        .setHandshakeHandler()      // 握手处理，连接的时候认证获取其他数据验证。
-                .setAllowedOriginPatterns("*");   // 允许跨域。
+                .setAllowedOrigins("*")     // 允许跨域。
 //                .addInterceptors(new WebSocketHandshakeInterceptor())      // 拦截处理，自定义拦截器。
-//                .withSockJS();      // 支持sockJS访问。
+                .withSockJS();      // 支持sockJS访问。
 
     }
 
