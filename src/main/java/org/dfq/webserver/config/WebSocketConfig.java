@@ -29,8 +29,8 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @RequiredArgsConstructor  //
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-
-    final JwtTokenProvider jwtTokenProvider;
+//
+//    final JwtTokenProvider jwtTokenProvider;
 
     // 以便可以在配置类中使用webSocketHandler
 //    private  WebSocketHandler webSocketHandler;
@@ -86,36 +86,36 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel) {
-                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                // 如果是连接请求（CONNECT 命令），从请求头中取出 token 并设置到认证信息中。
-                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    // 从连接头中提取授权令牌。
-                    String bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
-
-                    // 验证令牌格式并提取用户信息。
-                    if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                        try {
-                            // 移除 "Bearer " 前缀，从令牌中提取用户信息(username), 并设置到认证信息中。
-                            String tokenWithoutPrefix = bearerToken.substring(7);
-                            String username = jwtTokenProvider.getUsername(tokenWithoutPrefix);
-
-                            if (StrUtil.isNotBlank(username)) {
-                                accessor.setUser(() -> username);
-                                return message;
-                            }
-                        } catch (Exception e) {
-                            log.error("Failed to process authentication token.", e);
-                        }
-                    }
-                }
-                // 不是连接请求，直接放行。
-                return ChannelInterceptor.super.preSend(message, channel);
-            }
-        });
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(new ChannelInterceptor() {
+//            @Override
+//            public Message<?> preSend(@Nonnull Message<?> message, @Nonnull MessageChannel channel) {
+//                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+//                // 如果是连接请求（CONNECT 命令），从请求头中取出 token 并设置到认证信息中。
+//                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+//                    // 从连接头中提取授权令牌。
+//                    String bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
+//
+//                    // 验证令牌格式并提取用户信息。
+//                    if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
+//                        try {
+//                            // 移除 "Bearer " 前缀，从令牌中提取用户信息(username), 并设置到认证信息中。
+//                            String tokenWithoutPrefix = bearerToken.substring(7);
+//                            String username = jwtTokenProvider.getUsername(tokenWithoutPrefix);
+//
+//                            if (StrUtil.isNotBlank(username)) {
+//                                accessor.setUser(() -> username);
+//                                return message;
+//                            }
+//                        } catch (Exception e) {
+//                            log.error("Failed to process authentication token.", e);
+//                        }
+//                    }
+//                }
+//                // 不是连接请求，直接放行。
+//                return ChannelInterceptor.super.preSend(message, channel);
+//            }
+//        });
+//    }
 }
