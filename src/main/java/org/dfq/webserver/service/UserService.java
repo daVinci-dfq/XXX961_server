@@ -8,12 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.dfq.webserver.models.ServiceRes;
 import org.dfq.webserver.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -159,6 +164,28 @@ public class UserService {
     }
 
 
+    @Autowired
+    private JavaMailSender mailSender;
+
+    private String from;
+    /**
+     * 发送邮件
+     *
+     * @param to      收件人邮箱
+     * @param subject 邮件主题
+     * @param content 邮件内容
+     */
+    public void sendMail(String to, String subject, String content) throws MessagingException {
+        // 创建邮件消息
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(from);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(content, true);
+        // 发送邮件
+        mailSender.send(message);
+    }
 }
 
 

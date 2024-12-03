@@ -20,5 +20,7 @@ public class Video {
 
     private String thumbnailUrl; // 视频封面 URL
 
+    private String videoDescription;  // 视频描述
+
 
 }

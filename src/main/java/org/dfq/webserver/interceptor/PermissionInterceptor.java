@@ -27,6 +27,9 @@ public class PermissionInterceptor implements HandlerInterceptor {
     // 目标方法执行前调用
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 
+        String uri = request.getRequestURI();
+        // 跳过注册接口的token验证
+        if ("/api/user/register".equals(uri)) { return true; }
         // 检查用户JWT
         String jwt = request.getHeader("access-token");
 

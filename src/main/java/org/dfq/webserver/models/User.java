@@ -56,6 +56,8 @@ public class User {
 
     private Date lastLogin;
 
+    //头像avatar   修改
+    //个性签名      修改
 
     public User(Integer Id, String username) {
         this.userId = Id;
