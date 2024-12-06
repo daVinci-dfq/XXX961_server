@@ -12,56 +12,44 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
+
+/**
+ * 用户类
+ * @author dfq
+ * @see UserRepository
+ * @see UserService
+ */
 
 @Entity
 @Data
 public class User {
 
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Integer userId; // 主键
 
-    @Getter
-    @Setter
     @NotBlank
-    private String username;
+    private String username; // 用户名
 
-    @Getter
     @NotBlank
-    private String password;
+    private String password; // 密码
 
-    @Getter
-    @Setter
     @NotBlank
-    private String phone;
+    private String email; // 邮箱
 
-    @Getter
-    @Setter
     @NotBlank
-    private String email;
-
-    @Setter
-    @Getter
-    @NotBlank
-    private String role;
-
-    private Date createTime;
-
-    private Date lastLogin;
-
-    public User() {
-    }
+    private String role; // 角色
 
     public User(Integer Id, String username) {
         this.userId = Id;
         this.username = username;
         this.password = password;
+    }
+
+    public User() {
+
     }
 
 

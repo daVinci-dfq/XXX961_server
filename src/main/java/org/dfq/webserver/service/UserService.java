@@ -37,8 +37,6 @@ public class UserService {
 
                 // 密码MD5加密
                 user.setPassword(this.MD5Code(user.getPassword()));
-                // 加入创建时间
-                user.setCreateTime(new Date());
                 // 入库
                 userRepository.save(user);
                 return new ResponseEntity<>("注册成功！", HttpStatus.OK);
@@ -66,8 +64,6 @@ public class UserService {
             User curUser = this.checkUserIsExit(user);
             if(curUser!=null) {
 
-                // 更新用户最后登录时间
-                curUser.setLastLogin(new Date());
                 userRepository.save(curUser);
 
                 // 生成jwt

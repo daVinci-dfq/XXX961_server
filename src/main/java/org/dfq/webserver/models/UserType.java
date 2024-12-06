@@ -1,7 +1,9 @@
 package org.dfq.webserver.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class UserType {
     @Id
@@ -17,22 +19,6 @@ public class UserType {
     }
 
     public UserType(EUserType name) {
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public EUserType getName() {
-        return name;
-    }
-
-    public void setName(EUserType name) {
         this.name = name;
     }
 }
