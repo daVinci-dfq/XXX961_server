@@ -47,7 +47,7 @@ public class WebSocketController {
 
         log.info("sender:{}; receiver:{}", sender, receiver);
         // 发送消息给指定用户 /user/{username}/queue/greeting
-        simpMessagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message));
+//        simpMessagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message));
     }
 }
 
