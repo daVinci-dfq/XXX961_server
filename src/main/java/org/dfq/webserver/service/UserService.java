@@ -69,7 +69,15 @@ public class UserService {
 
             // 检查用户是否存在
             User curUser = this.checkUserIsExit(user);
+
+            boolean check = false;
+
+            //检查密码是否匹配
             if(curUser!=null) {
+                check = checkPassword(user);
+            }
+
+            if(curUser!=null && check) {
 
                 // 更新用户最后登录时间
                 curUser.setLastLogin(new Date());
@@ -164,9 +172,25 @@ public class UserService {
     }
 
 
+    //检查密码是否正确
+    private boolean checkPassword(User user) {
+        User u = userRepository.findByUsername(user.getUsername());
+        String password = u.getPassword();
+        if(user.getPassword().equals(password)) {
+            return true;
+        } else {
+          return false;
+        }
+    }
+
+
+
+
+
     @Autowired
     private JavaMailSender mailSender;
 
+    @Value("${spring.mail.username}")
     private String from;
     /**
      * 发送邮件

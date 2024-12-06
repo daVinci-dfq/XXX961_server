@@ -24,6 +24,7 @@ spring:
       max-request-size:200MB
   mail:
     host: smtp.qq.com
+    password: nbtytwwebbmoddgh
     port: 465
     properties:
       mail:
@@ -31,4 +32,6 @@ spring:
           ssl:
             enable: true
     test-connection: true
+    username: 3151823430@qq.com
+
 

@@ -59,14 +59,14 @@ public class UserController {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @PostMapping("/code")
+    @GetMapping("/code")
     public void senderMail() {
         System.out.println("发送成功");
         SimpleMailMessage message = new SimpleMailMessage();
         // 发件人 你的邮箱
-        message.setFrom("1703160024@qq.com");
+        message.setFrom("3151823430@qq.com");
         // 接收人 接收者邮箱
-        message.setTo(new String[]{"3151823430@qq.com"});
+        message.setTo(new String[]{"1543443156@qq.com"});
         //邮件标题
         message.setSubject("小红薯：");
         //邮件内容
