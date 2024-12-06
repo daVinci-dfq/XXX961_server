@@ -30,6 +30,12 @@ public class PermissionInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         // 跳过注册接口的token验证
         if ("/user/register".equals(uri) || "/user/code".equals(uri)) { return true; }
+
+        if("/user/login".equals(uri)) {
+            System.out.println("拦截到登录请求。");
+            return true;
+        }
+
         // 检查用户JWT
         String jwt = request.getHeader("access-token");
 

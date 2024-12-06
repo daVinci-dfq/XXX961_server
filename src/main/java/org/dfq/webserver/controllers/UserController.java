@@ -8,14 +8,9 @@ import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -27,14 +22,14 @@ public class UserController {
     UserService UserService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(User user) {
+    public ResponseEntity<String> register(@RequestBody User user) {
         System.out.println("注册成功");
         // 注册
         return UserService.register(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(User user) {
+    public ResponseEntity<String> login(@RequestBody User user) {
         System.out.println("登录成功");
 
         // 登录
@@ -60,7 +55,7 @@ public class UserController {
     private JavaMailSender javaMailSender;
 
     @GetMapping("/code")
-    public void senderMail() {
+    public ResponseEntity<String> senderMail() {
         System.out.println("发送成功");
         SimpleMailMessage message = new SimpleMailMessage();
         // 发件人 你的邮箱
@@ -73,6 +68,7 @@ public class UserController {
         message.setText("尊敬的用户：你好，欢迎来到小红薯，您的验证码为:678253");
         javaMailSender.send(message);
 
+        return ResponseEntity.ok("发送成功");
     }
 
 }
