@@ -32,23 +32,23 @@ public class WebSocketController {
         return "服务端通知: " + message;
     }
 
-//    /**
-//     * 点对点发送消息
-//     *
-//     * @param principal 当前用户
-//     * @param username  接收消息的用户
-//     * @param message   消息内容
-//     */
-//    @MessageMapping("/sendToUser/{username}")
-//    public void sendToUser(Principal principal, @DestinationVariable String username, String message) {
-//
-//        String sender = principal.getName(); // 发送人
-//        String receiver = username; // 接收人
-//
-//        log.info("sender:{}; receiver:{}", sender, receiver);
-//        // 发送消息给指定用户 /user/{username}/queue/greeting
-//        simpMessagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message));
-//    }
+    /**
+     * 点对点发送消息
+     *
+     * @param principal 当前用户
+     * @param username  接收消息的用户
+     * @param message   消息内容
+     */
+    @MessageMapping("/sendToUser/{username}")
+    public void sendToUser(Principal principal, @DestinationVariable String username, String message) {
+
+        String sender = principal.getName(); // 发送人
+        String receiver = username; // 接收人
+
+        log.info("sender:{}; receiver:{}", sender, receiver);
+        // 发送消息给指定用户 /user/{username}/queue/greeting
+        simpMessagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message));
+    }
 }
 
 

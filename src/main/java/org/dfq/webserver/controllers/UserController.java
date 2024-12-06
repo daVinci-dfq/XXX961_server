@@ -1,21 +1,24 @@
 package org.dfq.webserver.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.dfq.webserver.models.User;
 import org.dfq.webserver.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @Slf4j
-@Controller
+@RestController
 @ResponseBody
 @RequestMapping("/user")
 public class UserController {
@@ -25,13 +28,14 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(User user) {
-
+        System.out.println("注册成功");
         // 注册
         return UserService.register(user);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(User user) {
+        System.out.println("登录成功");
 
         // 登录
         return UserService.login(user);
@@ -39,7 +43,7 @@ public class UserController {
 
     @PutMapping("/changePassWord")
     public ResponseEntity<String> changePassWord(User user, HttpServletRequest request) {
-
+        System.out.println("改密成功");
         // 取出jwt中的用户
         User jwtUser = (User)request.getAttribute("jwt-user");
 
@@ -49,6 +53,25 @@ public class UserController {
 
         // 改密
         return UserService.changePassWord(user);
+
+    }
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @GetMapping("/code")
+    public void senderMail() {
+        System.out.println("发送成功");
+        SimpleMailMessage message = new SimpleMailMessage();
+        // 发件人 你的邮箱
+        message.setFrom("3151823430@qq.com");
+        // 接收人 接收者邮箱
+        message.setTo(new String[]{"1543443156@qq.com"});
+        //邮件标题
+        message.setSubject("小红薯：");
+        //邮件内容
+        message.setText("尊敬的用户：你好，欢迎来到小红薯，您的验证码为:678253");
+        javaMailSender.send(message);
 
     }
 

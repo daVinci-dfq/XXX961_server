@@ -45,13 +45,7 @@ public class User {
     public User(Integer Id, String username) {
         this.userId = Id;
         this.username = username;
-        this.password = password;
     }
-
-    public User() {
-
-    }
-
 
     // 更改密码
     public boolean changePassword(String oldPassword, String newPassword) {
@@ -62,4 +56,5 @@ public class User {
         return false;
     }
 
+    public User() {}
 }

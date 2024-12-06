@@ -8,12 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.dfq.webserver.models.ServiceRes;
 import org.dfq.webserver.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -62,7 +67,15 @@ public class UserService {
 
             // 检查用户是否存在
             User curUser = this.checkUserIsExit(user);
+
+            boolean check = false;
+
+            //检查密码是否匹配
             if(curUser!=null) {
+                check = checkPassword(user);
+            }
+
+            if(curUser!=null && check) {
 
                 userRepository.save(curUser);
 
@@ -155,6 +168,44 @@ public class UserService {
     }
 
 
+    //检查密码是否正确
+    private boolean checkPassword(User user) {
+        User u = userRepository.findByUsername(user.getUsername());
+        String password = u.getPassword();
+        if(user.getPassword().equals(password)) {
+            return true;
+        } else {
+          return false;
+        }
+    }
+
+
+
+
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String from;
+    /**
+     * 发送邮件
+     *
+     * @param to      收件人邮箱
+     * @param subject 邮件主题
+     * @param content 邮件内容
+     */
+    public void sendMail(String to, String subject, String content) throws MessagingException {
+        // 创建邮件消息
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(from);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(content, true);
+        // 发送邮件
+        mailSender.send(message);
+    }
 }
 
 
