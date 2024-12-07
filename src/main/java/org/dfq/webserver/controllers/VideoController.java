@@ -2,6 +2,7 @@ package org.dfq.webserver.controllers;
 
 import org.dfq.webserver.models.User;
 import org.dfq.webserver.models.Video;
+import org.dfq.webserver.security.Response;
 import org.dfq.webserver.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class VideoController {
     private VideoService videoService;
 
     @PostMapping("/upload")
-    public ResponseEntity<Video> uploadVideo(
+    public Response uploadVideo(
             @RequestParam("videoName") String videoName,
             @RequestParam("publisher") User publisher,
             @RequestParam("videoFile") MultipartFile videoFile,
@@ -32,6 +33,6 @@ public class VideoController {
         video.setPublisher(publisher);
 
         Video uploadedVideo = videoService.uploadVideo(video, videoFile, thumbnailFile);
-        return ResponseEntity.ok(uploadedVideo);
+        return Response.ok(uploadedVideo);
     }
 }

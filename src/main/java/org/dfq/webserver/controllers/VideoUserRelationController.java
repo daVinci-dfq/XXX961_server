@@ -20,16 +20,16 @@ public class VideoUserRelationController {
     @Autowired
     private UserService userServiceImpl;
 
-    @PostMapping("/videoUserSave")
-    public ResponseEntity<String> videoUserSave(
-            @RequestParam("userID") Integer userId,
-            @RequestParam("videoId") Integer videoId
-    ) {
-        VideoUserRelation videoUserRelation = new VideoUserRelation();
-
-
-
-        String msg = "保存成功。";
-        return ResponseEntity.ok(msg);
-    }
+//    @PostMapping("/videoUserSave")
+//    public ResponseEntity<String> videoUserSave(
+//            @RequestParam("userID") Integer userId,
+//            @RequestParam("videoId") Integer videoId
+//    ) {
+//        VideoUserRelation videoUserRelation = new VideoUserRelation();
+//
+//
+//
+//        String msg = "保存成功。";
+//        return ResponseEntity.ok(msg);
+//    }
 }

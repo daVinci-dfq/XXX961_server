@@ -2,12 +2,11 @@ package org.dfq.webserver.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.dfq.webserver.models.User;
+import org.dfq.webserver.security.Response;
 import org.dfq.webserver.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,14 +21,14 @@ public class UserController {
     UserService UserService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public Response register(@RequestBody User user) {
         System.out.println("注册成功");
         // 注册
         return UserService.register(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public Response login(@RequestBody User user) {
         System.out.println("登录成功");
 
         // 登录
@@ -37,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/changePassWord")
-    public ResponseEntity<String> changePassWord(User user, HttpServletRequest request) {
+    public Response changePassWord(User user, HttpServletRequest request) {
         System.out.println("改密成功");
         // 取出jwt中的用户
         User jwtUser = (User)request.getAttribute("jwt-user");

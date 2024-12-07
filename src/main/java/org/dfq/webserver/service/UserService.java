@@ -2,6 +2,7 @@ package org.dfq.webserver.service;
 
 import org.dfq.webserver.models.User;
 import org.dfq.webserver.repository.UserRepository;
+import org.dfq.webserver.security.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,6 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -32,7 +32,7 @@ public class UserService {
      * @param user 用户类
      * @return ServiceRes
      */
-    public ResponseEntity<String> register(User user) {
+    public Response register(User user) {
 
         // 判断用户名是否唯一
         if(this.checkUserNameIsUnique(user)) {
@@ -44,11 +44,11 @@ public class UserService {
                 user.setPassword(this.MD5Code(user.getPassword()));
                 // 入库
                 userRepository.save(user);
-                return new ResponseEntity<>("注册成功！", HttpStatus.OK);
+                return Response.ok("注册成功。");
 
-            } else return ResponseEntity.status(600).body("密码不合法。");
+            } else return Response.error("用户名或密码不合法。");
 
-        } else return ResponseEntity.status(601).body("用户名已存在。");
+        } else return Response.error("用户名已存在。");
 
     }
 
@@ -57,7 +57,7 @@ public class UserService {
      * @param user 用户类
      * @return ServiceRes
      */
-    public ResponseEntity<String> login(User user) {
+    public Response login(User user) {
 
         // 判断用户名密码是否合法
         if(this.checkUserNameAndPassword(user)) {
@@ -84,11 +84,11 @@ public class UserService {
                 payload.put("userId", curUser.getUserId().toString()); // 加入一些非敏感的用户信息
                 payload.put("userName", curUser.getUsername());    // 加入一些非敏感的用户信息
                 String jwt = JwtUtil.generateToken(payload);
-                return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(jwt);
+                return Response.ok("登录成功。", jwt);
 
-            } else return ResponseEntity.status(602).body("用户名或密码错误。");
+            } else return Response.error("用户名或密码错误。");
 
-        } else return ResponseEntity.status(603).body("用户名或密码不合法。");
+        } else return Response.error("用户名或密码不合法。");
     }
 
     /**
@@ -96,9 +96,9 @@ public class UserService {
      * @return ServiceRes
      */
 //    @Override
-    public ResponseEntity<String> changePassWord(User user) {
-        if(this.updatePassWord(user)) return ResponseEntity.ok().body("改密成功。");
-        else return ResponseEntity.status(604).body("改密失败。");
+    public Response changePassWord(User user) {
+        if(this.updatePassWord(user)) return Response.ok("改密成功。");
+        else return Response.error("改密失败。");
     }
 
     /**

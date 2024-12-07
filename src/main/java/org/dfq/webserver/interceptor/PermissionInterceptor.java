@@ -6,10 +6,10 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.dfq.webserver.models.ControllerRes;
 import org.dfq.webserver.models.User;
 import org.dfq.webserver.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.dfq.webserver.security.Response;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.dfq.webserver.security.Response;
 
 /**
  * 拦截需要授权的接口
@@ -72,12 +73,12 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
         } catch (JWTDecodeException e) {
             log.error("令牌错误");
-            addResBody(response, new ControllerRes(-1, "令牌错误"));  // 新增返回体
+            addResBody(response, Response.error("令牌错误。"));  // 新增返回体
             return false;
 
         } catch (TokenExpiredException e) {
             log.error("令牌过期");
-            addResBody(response, new ControllerRes(-1, "令牌过期"));  // 新增返回体
+            addResBody(response, Response.error("令牌过期。"));  // 新增返回体
             return false;
         }
 
@@ -93,7 +94,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
         HandlerInterceptor.super.afterCompletion((jakarta.servlet.http.HttpServletRequest) request, (jakarta.servlet.http.HttpServletResponse) response, handler, ex);
     }
 
-    private void addResBody(HttpServletResponse response, ControllerRes res) throws IOException {
+    private void addResBody(HttpServletResponse response, Response res ) throws IOException {
 
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);        // 设置状态码
 
